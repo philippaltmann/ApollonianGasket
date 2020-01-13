@@ -1,28 +1,57 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Adjust v-on:depth-change="updateDepth"/>
+    <Prolog :triangle="triangle" :depth="1"
+            v-on:circles-change="updateCircles"/>
+    <Canvas :width="width" :height="height"
+            :circles="circles" :triangle="triangle"
+            v-on:triangle-change="updateTriangle"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Adjust from './components/Adjust.vue'
+import Canvas from './components/Canvas.vue'
+import Prolog from './components/Prolog.vue'
 
 export default {
   name: 'app',
-  components: {
-    HelloWorld
-  }
+  components: { Adjust, Canvas, Prolog },
+  data () {
+    return {
+      triangle: [
+        {name: 'A', x:550, y:400},
+        {name: 'B', x:820, y:450},
+        {name: 'C', x:650, y:650}
+      ],
+      circles: [],
+      height: window.innerHeight,
+      width: window.innerWidth,
+      depth: 0
+    }
+  },
+  methods: {
+    updateTriangle: function(t) { this.triangle = t.splice(0); },
+    updateCircles: function(c) { this.circles = c.splice(0); },
+    updateDepth: function(d) { this.depth = d; },
+  },
 }
 </script>
 
 <style>
+
+body {
+  margin: 0;
+  background-color: #cfd8dc;
+}
 #app {
+  /* font-family: 'Lato', Helvetica, Arial, sans-serif; */
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #263238;
+  /* #2c3e50; */
+  /* margin-top: 60px; */
 }
+
 </style>
