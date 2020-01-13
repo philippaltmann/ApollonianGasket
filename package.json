@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.4.4",
+    "raw-loader": "^4.0.0",
+    "tau-prolog": "^0.2.80",
     "vue": "^2.6.10"
   },
   "devDependencies": {
@@ -29,7 +31,9 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
