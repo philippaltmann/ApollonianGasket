@@ -1,23 +1,43 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy
+
 on:
   push:
     branches:
       - master
+
 jobs:
   build-and-deploy:
+
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
 
-    - name: Build
-      run: |
-        yarn install
-        yarn run build
-
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: production
-        FOLDER: dist
+      - name: Build
+        run: |
+          yarn install
+          yarn run build
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v1.2.5
+        with:
+          # GitHub repository where assets will be deployed (default current)
+          # repo: # optional
+          # Git branch where assets will be deployed
+          # target_branch: production # optional, default is gh-pages
+          # Create incremental commit instead of doing push force
+          #keep_history: # optional, default is false
+          # Allow an empty commit to be created
+          #allow_empty_commit: # optional, default is true
+          # Build directory to deploy
+          build_dir: dist
+          # Commit author's name
+          #committer_name: # optional
+          # Commit author's email
+          #committer_email: # optional
+          # Commit message
+          #commit_message: # optional
+          # Write the given domain name to the CNAME file
+          #fqdn: # optional
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
