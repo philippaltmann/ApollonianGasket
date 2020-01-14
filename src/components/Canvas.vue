@@ -4,7 +4,7 @@
 <script>
 
   import Prolog from 'tau-prolog'
-  import Triangle from '!raw-loader!../assets/triangle.pl'
+  import Triangle from '!raw-loader!../prolog/triangle.pl'
 
   export default {
     data () {
