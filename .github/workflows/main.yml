@@ -1,4 +1,4 @@
-name: CI
+name: Build and Deploy
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
       - name: Build
         run: |
           yarn install
-          yarn run build   
+          yarn run build
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v1.2.5
         with:
@@ -39,3 +39,5 @@ jobs:
           #commit_message: # optional
           # Write the given domain name to the CNAME file
           #fqdn: # optional
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
