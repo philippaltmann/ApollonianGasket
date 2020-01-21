@@ -116,3 +116,16 @@ gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
   gasket(triangle(point(XB, YB), point(XC, YC), point(XO, YO))).
 
 % circles
+% recursive(circles, depth, maxDepth) :-
+
+% Alternative fourth curvature from the previous four
+vieta(R1, R2, R3, R4, K1N, Z1N) :-
+  Z1N is (2 * (R2 + R3 + R4) - R1) / K1N
+
+vieta(F, R1, R2, R3) :-
+  CF = 1/F,
+  C1 = 1/R1,
+  C2 = 1/R2,
+  C3 = 1/R3,
+  KN = 2 * (C1 + C2 + C3) - CF,
+  
