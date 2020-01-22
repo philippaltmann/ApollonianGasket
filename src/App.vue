@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Adjust v-on:depth-change="updateDepth"/>
-    <Prolog :triangle="triangle" :depth="1"
+    <Prolog :triangle="triangle" :depth="depth"
             v-on:circles-change="updateCircles"/>
     <Canvas :width="width" :height="height"
             :circles="circles" :triangle="triangle"
@@ -33,25 +33,19 @@ export default {
   methods: {
     updateTriangle: function(t) { this.triangle = t.splice(0); },
     updateCircles: function(c) { this.circles = c.splice(0); },
-    updateDepth: function(d) { this.depth = d; },
+    updateDepth: function(d) { this.depth = parseInt(d); },
   },
 }
 </script>
 
 <style>
 
-body {
-  margin: 0;
-  background-color: #cfd8dc;
-}
+body { margin: 0; background-color: #cfd8dc; }
 #app {
-  /* font-family: 'Lato', Helvetica, Arial, sans-serif; */
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #263238;
-  /* #2c3e50; */
-  /* margin-top: 60px; */
 }
 
 </style>
