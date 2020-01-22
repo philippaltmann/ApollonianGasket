@@ -27,7 +27,7 @@ export default {
       circles: [],
       height: window.innerHeight,
       width: window.innerWidth,
-      depth: 0
+      depth: 2
     }
   },
   methods: {

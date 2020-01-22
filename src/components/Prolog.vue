@@ -18,7 +18,9 @@
         let parsed = this.session.query( query );
         if( parsed !== true ) { console.log( parsed ); }
         for (var i = 0; i < this.depth; i++) {
-          this.session.answer( a => if(a){ circles = circles.concat(a.lookup('G').toJavaScript())})
+          this.session.answer( a => {
+            if(a) circles = circles.concat(a.lookup('G').toJavaScript())
+          })
         }
 
         query = `gasket(${circles.map(c=>`(${c.join(', ')})`).join(', ')}, ${this.depth}, G).`;
