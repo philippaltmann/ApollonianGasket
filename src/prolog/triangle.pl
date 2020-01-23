@@ -122,3 +122,8 @@ gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
   gasket(triangle(point(XB, YB), point(XC, YC), point(XO, YO))).
 
 % circles
+
+% gasket(L) :- member(IO, L).
+% gasket(L) :- member(RAD, L), gasket([IO|L]).
+% gasket(L) :- member(TRIA, L), gasket([RAD|L]).
+% gasket(L) :- member(point(XA, YA), L), member(point(XB, YB), L), member(point(XC, YC), L), triangle(point(XA, YA), point(XB, YB), point(XC, YC)), gasket([TRIA|L]).
