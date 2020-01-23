@@ -1,3 +1,5 @@
+%:- op(1200, xfx, --->).
+
 % point(ID, X, Y) :- X >= 0, Y >= 0. %ID type check
 %
 %
@@ -33,19 +35,23 @@
 % Gasket(T1, C)
 % C=[circle,...]
 
-point(X, Y) :- X >= 0, Y >= 0. %ID type check
+point(X, Y) :- number(X), number(Y), X >= 0, Y >= 0. %ID type check
+
+%number(X), number(Y), X >= 0, Y >= 0 ---> point(X,Y).
 
 % circle(point(X,Y), R) :-
 
 triangle(point(XA, YA), point(XB, YB), point(XC, YC)) :-
+  point(XA,YA), point(XB, YB), point(XC, YC),
   point(XA, YA) \= point(XB, YB),
   point(XA, YA) \= point(XC, YC),
   point(XB, YB) \= point(XC, YC).
 
-distance(point(X1, Y1), point(X2, Y2), D) :-
-  D is sqrt((X2-X1)^2 + (Y2-Y1)^2).
+% distance(point(X1, Y1), point(X2, Y2), D) :-
+%   D is sqrt((X2-X1)^2 + (Y2-Y1)^2).
 
 sides(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), DA, DB, DC) :-
+  triangle(point(XA, YA), point(XB, YB), point(XC, YC)),
   DA is sqrt((XB-XC)^2 + (YB-YC)^2),
   DB is sqrt((XA-XC)^2 + (YA-YC)^2),
   DC is sqrt((XA-XB)^2 + (YA-YB)^2).
