@@ -85,9 +85,22 @@ recurse(C1, C2, C3, CO, [ [X5, Y5, R5], [X6, Y6, R6], [X7, Y7, R7]|Tail ], Depth
   DepthN is Depth - 1,
   flip(CO, C1, C2, C3, (X5, Y5, R5)),
   flip(CO, C1, C3, C2, (X6, Y6, R6)),
-  flip(CO, C2, C3, C1, (X7, Y7, R7)),
+  flip(CO, C2, C3, C1, (X7, Y7, R7)), !,
   recurse(C1, C2, CO, (X5, Y5, R5), Rec1, DepthN),
   recurse(C1, C3, CO, (X6, Y6, R6), Rec2, DepthN),
-  recurse(C2, CO, C3, (X7, Y7, R7), Rec3, DepthN),
+  recurse(C2, C3, CO, (X7, Y7, R7), Rec3, DepthN),
   append(Rec1, Rec2, PreTail),
   append(PreTail, Rec3, Tail).
+
+loop_through_list(File, [Head|[]]) :- write(File, Head).
+loop_through_list(File, [Head|Tail]) :-
+    write(File, Head), write(File, ', '),
+    loop_through_list(File, Tail).
+
+writeGasket(C1, C2, C3, Depth, Filename) :-
+  gasket(C1, C2, C3, Depth, G),
+  open(Filename, write, File),
+  write(File, '{ "gasket": [ '),
+  loop_through_list(File, G),
+  write(File, ' ] }'),
+  close(File).
