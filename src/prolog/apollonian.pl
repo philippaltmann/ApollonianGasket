@@ -15,6 +15,12 @@ basis(triangle((XA, YA), (XB, YB), (XC, YC)), [[XA, YA, RA], [XB, YB, RB], [XC, 
   RB is 1/2*( A-B+C),
   RC is 1/2*( A+B-C).
 
+basis((XA, YA, RA), (XB, YB, RB), (XC, YC, RC)):-
+  sides(((XA, YA), (XB, YB), (XC, YC)), A, B, C),
+  RA is 1/2*(-A+B+C),
+  RB is 1/2*( A-B+C),
+  RC is 1/2*( A+B-C).
+
 
 % Complex Numbers
 sum([], (0, 0)).
@@ -70,6 +76,8 @@ flip((X1, Y1, R1), (X2, Y2, R2), (X3, Y3, R3), (X4, Y4, R4), (X5, Y5, R5)) :-
   sum([(X1*B1, Y1*B1), (X2*B2, Y2*B2), (X3*B3, Y3*B3)], S), mul(S, (2,0), S2),
   sub(S2, ((X4*B4, Y4*B4)), S2Sub), div(S2Sub, (B5, 0), (X5, Y5)).
 
+gasket(_, _, _, 0, []).
+
 gasket(C1, C2, C3, Depth, [[XI, YI, RI], [XO, YO, RO]|Tail ]) :-
   adjacent(C1, C2, C3, (XI, YI, RI)), flip(C1, C2, C3, (XI, YI, RI), (XO, YO, RO)),
   DepthN is Depth - 1,
@@ -78,7 +86,7 @@ gasket(C1, C2, C3, Depth, [[XI, YI, RI], [XO, YO, RO]|Tail ]) :-
   append(InnerRecurse, OuterRecurse, Tail).
 
 % Recursion Break Condition
-recurse(C1, C2, C3, CO, [], 0).
+recurse( _, _, _, _, [], 0).
 
 % CO: Fixed Circle
 recurse(C1, C2, C3, CO, [ [X5, Y5, R5], [X6, Y6, R6], [X7, Y7, R7]|Tail ], Depth) :-
