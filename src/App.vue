@@ -28,7 +28,7 @@ export default {
       circles: [],
       height: window.innerHeight,
       width: window.innerWidth,
-      depth: 6
+      depth: 2
     }
   },
   methods: {
@@ -37,7 +37,6 @@ export default {
       this.$refs.prolog.computeBase(this.triangle);
     },
     updateGasket: function() {
-      console.log('updateGasket');
       this.$refs.prolog.computeCircles();
     },
     updateCircles: function(c) { this.circles = c.splice(0); },
