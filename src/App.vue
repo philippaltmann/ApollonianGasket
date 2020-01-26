@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <Adjust v-on:depth-change="updateDepth"/>
-    <Prolog :triangle="triangle" :depth="depth"
+    <Prolog :triangle="triangle" :depth="depth" ref="prolog"
             v-on:circles-change="updateCircles"/>
     <Canvas :width="width" :height="height"
             :circles="circles" :triangle="triangle"
-            v-on:triangle-change="updateTriangle"/>
+            v-on:triangle-change="updateTriangle($event)"
+            v-on:update-gasket="updateGasket"/>
   </div>
 </template>
 
@@ -27,11 +28,18 @@ export default {
       circles: [],
       height: window.innerHeight,
       width: window.innerWidth,
-      depth: 2
+      depth: 6
     }
   },
   methods: {
-    updateTriangle: function(t) { this.triangle = t.splice(0); },
+    updateTriangle: function(t) {
+      this.triangle = t.splice(0);
+      this.$refs.prolog.computeBase(this.triangle);
+    },
+    updateGasket: function() {
+      console.log('updateGasket');
+      this.$refs.prolog.computeCircles();
+    },
     updateCircles: function(c) { this.circles = c.splice(0); },
     updateDepth: function(d) { this.depth = parseInt(d); },
   },
