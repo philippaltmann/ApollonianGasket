@@ -13,7 +13,11 @@
     data () {
       return {
         session: Prolog.create(100000000), //up to 27 Hours calculations
-        circles: []
+        circles: [],
+        fetch: {
+          active: false,
+          controller: new AbortController()
+        }
       }
     },
     props: {
@@ -23,21 +27,30 @@
     methods: {
       computeBase: function(triangle){
         this.circles = []
+        //TODO simplify basis prolog code
         let query = `basis(triangle(${triangle.map(p=>`(${p.x}, ${p.y})`).join(', ')}), G).`;
-        // console.log(query);
-        // console.log(triangle);
         let parsed = this.session.query( query );
         if( parsed !== true ) { console.log( parsed ); }
-        for (var i = 0; i < this.depth; i++) {
-          this.session.answer( a => {
-            if(a) this.circles = this.circles.concat(a.lookup('G').toJavaScript())
-          })
-        }
+        this.session.answer( a => {
+          if(a) this.circles = this.circles.concat(a.lookup('G').toJavaScript())
+        })
         this.$emit('circles-change', this.circles);
       },
       computeCircles: function(){
+
+        // TODO abort old request
+        // let start = Date.now()
+        let query = this.triangle.map((t,i) => `x${i+1}=${t.x}&y${i+1}=${t.y}`).join('&')
+        query = `${query}&depth=${this.depth}`
+       fetch(`http://localhost:8008/gasket?${query}`,{ cache: "force-cache" })
+         .then(r => r.json()).then((response) => {
+           this.$emit('circles-change', response);
+             // const millis = Date.now() - start;
+             // console.log(`Fetching Depth ${this.depth} via Prolog HTTP took: ${millis} MS`);
+        }).catch(e => console.log(e))
+
         // let circles = []
-        let query = `basis(triangle(${this.triangle.map(p=>`(${p.x}, ${p.y})`).join(', ')}), G).`;
+        /*let query = `basis(triangle(${this.triangle.map(p=>`(${p.x}, ${p.y})`).join(', ')}), G).`;
         let parsed = this.session.query( query );
         if( parsed !== true ) { console.log( parsed ); }
         for (var i = 0; i < this.depth; i++) {
@@ -56,36 +69,11 @@
           // const millis = Date.now() - start;
           // console.log(`Calculating Depth ${this.depth} via localStorage took: ${millis} MS`);
           } else { console.log('False'); console.log(a); }
-        })
-
-        // Alternative Data Flow using localStorage
-        // let start = Date.now()
-        /*query = `writeGasket(${this.circles.map(c=>`(${c.join(', ')})`).join(', ')}, ${this.depth}, 'result').`;
-        parsed = this.session.query( query );
-        if( parsed !== true ) { console.error( parsed ); }
-        this.session.answer( a => { if(a) {
-          var data = JSON.parse(localStorage.getItem('result'));
-          this.$emit('circles-change', this.circles.concat(data.gasket));
-          const millis = Date.now() - start;
-          console.log(`Calculating Depth ${this.depth} via localStorage took: ${millis} MS`);
-          localStorage.removeItem('result')
-          } else { console.log('False'); console.log(a); }
         })*/
-
-        // Loading Gasket from external generated json
-        //let start = Date.now()
-        /*fetch('./gasket.json').then(r => r.json()).then((d) => {
-            // console.log(d.gasket.length);
-            this.$emit('circles-change', d.gasket);
-            // const millis = Date.now() - start;
-            // console.log(`Loading Depth 10 JSON took: ${millis} MS`);
-         });*/
-
-        // this.$emit('circles-change', circles);
       }
     },
     watch: {
-      depth: function(d){ this.computeCircles() }
+      depth: function(){ this.computeCircles() }
     },
     render () {return ''},
     created () { this.session.consult(Apollonian); },
