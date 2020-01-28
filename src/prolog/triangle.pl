@@ -8,6 +8,8 @@
 %   triangle(Triangle, A, B, C), point(A, AX, AY), point(B, BX, BY), point(C, CX, CY),
 %   distance()
 
+% Complex numbers
+% pack_install(plcomplex).
 
 % distance(A, B, D) :-
 %   point(A, X1, Y1),
@@ -120,7 +122,7 @@ gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
 recursive(C1, C2, C3, C4, Depth, MaxDepth) :-
   Depth == MaxDepth, !.
 
-recursive(C1, C2, C3, C4, Depth, Depth) :-
+recursive(C1, C2, C3, C4, Depth, MaxDepth) :-
     ( Depth == 0
       -> CN1 is vieta(C1, C2, C3, C4),
       recursive(Temp, C2, C3, C4,), 1, MaxDepth,
@@ -137,10 +139,18 @@ recursive(C1, C2, C3, C4, Depth, Depth) :-
 vieta(R1, R2, R3, R4, K1N, Z1N) :-
   Z1N is (2 * (R2 + R3 + R4) - R1) / K1N
 
-vieta(F, R1, R2, R3) :-
+% four circles touch, calculate alternative one touching last three cirlces
+% F: touches three circles (C1, C2, C3, C4), except the alternative one
+vieta(F, R1, R2, R3, NewCircle) :-
   CF = 1/F,
-  C1 = 1/R1,
+  C1 = 1/R1, % 1/R to get curvature
   C2 = 1/R2,
   C3 = 1/R3,
   KN = 2 * (C1 + C2 + C3) - CF,
-  
+  MN = (2 * (C1 + C2 + C3) - CF) / KN)),
+  NewCircle is circle(MN, complex(MN), 1/curn). % Complex number module missing
+
+% M1 is (X + Y * J)
+% X: x center coord
+% Y: y center coord
+% J: Complex Number
