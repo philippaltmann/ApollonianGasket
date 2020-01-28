@@ -116,7 +116,22 @@ gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
   gasket(triangle(point(XB, YB), point(XC, YC), point(XO, YO))).
 
 % circles
-% recursive(circles, depth, maxDepth) :-
+% calculate an alternative circle from four others
+recursive(C1, C2, C3, C4, Depth, MaxDepth) :-
+  Depth == MaxDepth, !.
+
+recursive(C1, C2, C3, C4, Depth, Depth) :-
+    ( Depth == 0
+      -> CN1 is vieta(C1, C2, C3, C4),
+      recursive(Temp, C2, C3, C4,), 1, MaxDepth,
+      CN2 is vieta(C2, C1, C3, C4),
+      CN3 is vieta(C3, C1, C2, C4),
+      CN4 is vieta(C4, C1, C2, C3),
+
+      recursive((CN2, C1, C3, C4), Depth+1, MaxDepth),
+      recursive((CN3, C1, C2, C4), Depth+1, MaxDepth),
+      recursive((CN4, C1, C2, C3), Depth+1, MaxDepth).
+    ).
 
 % Alternative fourth curvature from the previous four
 vieta(R1, R2, R3, R4, K1N, Z1N) :-
