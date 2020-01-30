@@ -68,6 +68,15 @@ descartes(R1, R2, R3, RI, RO) :-
   RI is abs(1/KI),
   RO is abs(1/KO).
 
+% special case: third circle becomes a line
+descartes(R1, R2, RI, RO) :-
+    K1 is (1 / R1),
+    K2 is (1 / R2),
+    KI is K1 + K2 + 2 * sqrt(K1 * K2),
+    KO is K1 + K2 - 2 * sqrt(K1 * K2),
+    RI is (1 / KI),
+    RO is (1 / K0).
+
 
 % Calculate Outer Circle for triangle
 % todo circle(point(X,Y), R)
@@ -102,8 +111,6 @@ inner(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), X, Y, R):-
   descartes(R1, R2, R3, R, _),
   X is (U*XA + V*XB + W*XC) / (U+V+W),
   Y is (U*YA + V*YB + W*YC) / (U+V+W).
-
-
 
 % gasket(triangle(point(1, 1), point(3, 1), point(2, 3)).
 gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
