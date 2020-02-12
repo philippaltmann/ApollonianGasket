@@ -13,7 +13,8 @@ handle_gasket(Request) :-
     depth(Depth, [number]), x1(X1, [float]), y1(Y1, [float]),
     x2(X2, [float]), y2(Y2, [float]), x3(X3, [float]), y3(Y3, [float])
   ]),
-  basis((X1, Y1, R1), (X2, Y2, R2), (X3, Y3, R3)),
-  gasket((X1, Y1, R1), (X2, Y2, R2), (X3, Y3, R3), Depth, Gasket),
-  append([[X1, Y1, R1], [X2, Y2, R2], [X3, Y3, R3]], Gasket, Result),
-  cors_enable, reply_json(Result, []).
+  % Generate Mutually Tangent Circles from given Triangle
+  tangent((X1, Y1), (X2, Y2), (X3, Y3), Base),
+  % Generate Gasket for given Depth based on Tangent Circles
+  gasket( Base, Depth, Gasket ),
+  cors_enable, reply_json(Gasket, []).
