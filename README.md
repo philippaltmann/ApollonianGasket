@@ -10,7 +10,7 @@ yarn install
 yarn run serve
 ```
 
-### Run the Prolog API 
+### Run the Prolog API
 ```
 yarn run api
 ```
