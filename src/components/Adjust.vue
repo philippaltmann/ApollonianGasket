@@ -25,7 +25,6 @@
   padding: 10px 0;
   color: #cfd8dc;
   background-color: #263238;
-  /* z-index: -1; */
   display: flex;
   align-items: center;
   justify-content: space-between;
