@@ -10,6 +10,8 @@
 %   triangle(Triangle, A, B, C), point(A, AX, AY), point(B, BX, BY), point(C, CX, CY),
 %   distance()
 
+% Complex numbers
+% pack_install(plcomplex).
 
 % distance(A, B, D) :-
 %   point(A, X1, Y1),
@@ -72,6 +74,15 @@ descartes(R1, R2, R3, RI, RO) :-
   RI is abs(1/KI),
   RO is abs(1/KO).
 
+% special case: third circle becomes a line
+descartes(R1, R2, RI, RO) :-
+    K1 is (1 / R1),
+    K2 is (1 / R2),
+    KI is K1 + K2 + 2 * sqrt(K1 * K2),
+    KO is K1 + K2 - 2 * sqrt(K1 * K2),
+    RI is (1 / KI),
+    RO is (1 / K0).
+
 
 % Calculate Outer Circle for triangle
 % todo circle(point(X,Y), R)
@@ -107,8 +118,6 @@ inner(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), X, Y, R):-
   X is (U*XA + V*XB + W*XC) / (U+V+W),
   Y is (U*YA + V*YB + W*YC) / (U+V+W).
 
-
-
 % gasket(triangle(point(1, 1), point(3, 1), point(2, 3)).
 gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
   % circles(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), RA, RB, RC),
@@ -122,8 +131,39 @@ gasket(triangle(point(XA, YA), point(XB, YB), point(XC, YC))):-
   gasket(triangle(point(XB, YB), point(XC, YC), point(XO, YO))).
 
 % circles
+% calculate an alternative circle from four others
+recursive(C1, C2, C3, C4, Depth, MaxDepth) :-
+  Depth == MaxDepth, !.
 
-% gasket(L) :- member(IO, L).
-% gasket(L) :- member(RAD, L), gasket([IO|L]).
-% gasket(L) :- member(TRIA, L), gasket([RAD|L]).
-% gasket(L) :- member(point(XA, YA), L), member(point(XB, YB), L), member(point(XC, YC), L), triangle(point(XA, YA), point(XB, YB), point(XC, YC)), gasket([TRIA|L]).
+recursive(C1, C2, C3, C4, Depth, MaxDepth) :-
+    ( Depth == 0
+      -> CN1 is vieta(C1, C2, C3, C4),
+      recursive(Temp, C2, C3, C4,), 1, MaxDepth,
+      CN2 is vieta(C2, C1, C3, C4),
+      CN3 is vieta(C3, C1, C2, C4),
+      CN4 is vieta(C4, C1, C2, C3),
+
+      recursive((CN2, C1, C3, C4), Depth+1, MaxDepth),
+      recursive((CN3, C1, C2, C4), Depth+1, MaxDepth),
+      recursive((CN4, C1, C2, C3), Depth+1, MaxDepth).
+    ).
+
+% Alternative fourth curvature from the previous four
+vieta(R1, R2, R3, R4, K1N, Z1N) :-
+  Z1N is (2 * (R2 + R3 + R4) - R1) / K1N
+
+% four circles touch, calculate alternative one touching last three cirlces
+% F: touches three circles (C1, C2, C3, C4), except the alternative one
+vieta(F, R1, R2, R3, NewCircle) :-
+  CF = 1/F,
+  C1 = 1/R1, % 1/R to get curvature
+  C2 = 1/R2,
+  C3 = 1/R3,
+  KN = 2 * (C1 + C2 + C3) - CF,
+  MN = (2 * (C1 + C2 + C3) - CF) / KN)),
+  NewCircle is circle(MN, complex(MN), 1/curn). % Complex number module missing
+
+% M1 is (X + Y * J)
+% X: x center coord
+% Y: y center coord
+% J: Complex Number

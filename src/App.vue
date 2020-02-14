@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <Adjust v-on:depth-change="updateDepth"/>
-    <Prolog :triangle="triangle" :depth="1"
+    <Prolog :triangle="triangle" :depth="depth" ref="prolog"
             v-on:circles-change="updateCircles"/>
     <Canvas :width="width" :height="height"
             :circles="circles" :triangle="triangle"
-            v-on:triangle-change="updateTriangle"/>
+            v-on:triangle-change="updateTriangle($event)"
+            v-on:update-gasket="updateGasket"/>
   </div>
 </template>
 
@@ -27,31 +28,31 @@ export default {
       circles: [],
       height: window.innerHeight,
       width: window.innerWidth,
-      depth: 0
+      depth: 2
     }
   },
   methods: {
-    updateTriangle: function(t) { this.triangle = t.splice(0); },
+    updateTriangle: function(t) {
+      this.triangle = t.splice(0);
+      this.$refs.prolog.computeBase(this.triangle);
+    },
+    updateGasket: function() {
+      this.$refs.prolog.computeCircles();
+    },
     updateCircles: function(c) { this.circles = c.splice(0); },
-    updateDepth: function(d) { this.depth = d; },
+    updateDepth: function(d) { this.depth = parseInt(d); },
   },
 }
 </script>
 
 <style>
 
-body {
-  margin: 0;
-  background-color: #cfd8dc;
-}
+body { margin: 0; background-color: #cfd8dc; }
 #app {
-  /* font-family: 'Lato', Helvetica, Arial, sans-serif; */
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #263238;
-  /* #2c3e50; */
-  /* margin-top: 60px; */
 }
 
 </style>

@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "api" : "swipl src/prolog/rest.pl",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "^3.4.4",
+    "json-loader": "^0.5.7",
     "raw-loader": "^4.0.0",
     "tau-prolog": "^0.2.80",
     "vue": "^2.6.10"

@@ -1,86 +1,32 @@
-
 <script>
   import Prolog from 'tau-prolog'
-  import Triangle from '!raw-loader!../prolog/triangle.pl'
+  import Apollonian from '!raw-loader!../prolog/apollonian.pl'
 
   export default {
-    // Options / Data
-    data () {
-      return {
-        session: Prolog.create()
-      }
-    },
-    props: {
-      triangle: Array,
-      // circles: Array,
-      depth: Number,
-      // circles: Array
-    },
-    // computed: {},
-    methods: {
-      computeCircles: function(){
-        let query = `circles(triangle(${this.triangle.map(p=>`point(${p.x}, ${p.y})`).join(', ')}), ${this.triangle.map(p=>p.name).join(', ')}).`;
-        let parsed = this.session.query( query );
-        if( parsed !== true ) { console.log( parsed ); }
-        // console.log(query);
-        let circles = []
-        this.session.answer( a => {
-            // console.log(a.toString());
-            circles = this.triangle.map(t => Object.assign(t, {r: a.lookup(t.name).value}));
-            // this.$emit('circles-change', c);
-        });
-        // console.log(circles);
-
-        //Inner Circle
-        query = `inner(triangle(${this.triangle.map(p=>`point(${p.x}, ${p.y})`).join(', ')}), X, Y, R).`;
-        parsed = this.session.query( query );
-        if( parsed !== true ) { console.log( parsed ); }
-        // console.log(query);
-        this.session.answer( a => {
-            let circle = {x: a.lookup('X').value, y: a.lookup('Y').value, r: a.lookup('R').value}
-            circles.push(circle);
-            // console.log(a.toString());
-            // this.$emit('circles-change', c);
-        });
-        // console.log(circles);
-
-        //Outer Circle
-        query = `outer(triangle(${this.triangle.map(p=>`point(${p.x}, ${p.y})`).join(', ')}), X, Y, R).`;
-        parsed = this.session.query( query );
-        if( parsed !== true ) { console.log( parsed ); }
-        // console.log(query);
-        this.session.answer( a => {
-            let circle = {x: a.lookup('X').value, y: a.lookup('Y').value, r: a.lookup('R').value}
-            circles.push(circle);
-            // console.log(a.toString());
-            // this.$emit('circles-change', c);
-        });
-        // console.log(circles);
-        this.$emit('circles-change', circles);
-
-
-      }
-    },
-    watch: { triangle: function(t){ this.computeCircles()} },
-    render () {return ''},
-    created () { this.session.consult(Triangle); },
-    mounted () { this.computeCircles() },
-    // beforeUpdate () {},
-    // updated () {},
-    // activated () {},
-    // deactivated () {},
-    // beforeDestroy () {},
-    // destroyed () {},
-    // Options / Assets
-    // directives: {},
-    // filters: {},
-    // components: {},
-    // Options / Misc
-    // parent: null,
-    // mixins: [],
     name: 'Prolog',
-    // extends: {},
-    // delimiters: [ '{{', '}}' ],
-    // functional: false
+    data () { return { session: Prolog.create(), circles: [], } },
+    props: { triangle: Array, depth: Number },
+    methods: {
+      computeBase: function(triangle){
+        this.circles = []
+        let query = `tangent(${triangle.map(p=>`(${p.x}, ${p.y})`).join(', ')}, G).`;
+        if(this.session.query(query)) {
+          this.session.answer( a => {
+            if(a) this.$emit('circles-change', a.lookup('G').toJavaScript())
+          })
+        }
+      },
+      computeCircles: function(){
+        let query = this.triangle.map((t,i) => `x${i+1}=${t.x}&y${i+1}=${t.y}`).join('&')
+        query = `${query}&depth=${this.depth}`
+       fetch(`http://localhost:8008/gasket?${query}`,{ cache: "force-cache" })
+         .then(r => r.json()).then((r) => this.$emit('circles-change', r))
+         .catch(e => console.log(e))
+      }
+    },
+    watch: { depth: function(){ this.computeCircles() } },
+    created () { this.session.consult(Apollonian); },
+    mounted () { this.computeCircles() },
+    render () {return ''}
   }
 </script>

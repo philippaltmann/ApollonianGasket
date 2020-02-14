@@ -3,7 +3,7 @@
     <h1>Apollonian Gasket</h1>
     <div class="right">
       <h2>Depth: {{ depth }}</h2>
-      <input v-model="depth" type="range" min="0" max="10" class="slider" @input="update">
+      <input v-model="depth" type="range" min="1" max="10" class="slider" @input="update">
     </div>
   </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
   export default {
     name: 'Adjust',
-    data () { return { depth: 0} },
+    data () { return { depth: 2} },
     methods: { update: function (){ this.$emit('depth-change', this.depth); } },
   }
 </script>
@@ -25,7 +25,6 @@
   padding: 10px 0;
   color: #cfd8dc;
   background-color: #263238;
-  /* z-index: -1; */
   display: flex;
   align-items: center;
   justify-content: space-between;
