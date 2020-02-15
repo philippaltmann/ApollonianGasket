@@ -35,6 +35,8 @@
 % Gasket(T1, C)
 % C=[circle,...]
 
+:- use_module(complex).
+
 point(X, Y) :- X >= 0, Y >= 0. %ID type check
 
 % circle(point(X,Y), R) :-
