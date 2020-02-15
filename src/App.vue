@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import Adjust from './components/Adjust.vue'
-import Canvas from './components/Canvas.vue'
-import Prolog from './components/Prolog.vue'
+import Adjust from './components/Adjust.vue';
+import Canvas from './components/Canvas.vue';
+import Prolog from './components/Prolog.vue';
 
 export default {
   name: 'app',

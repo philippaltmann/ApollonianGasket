@@ -1,5 +1,3 @@
-%:- op(1200, xfx, --->).
-
 % point(ID, X, Y) :- X >= 0, Y >= 0. %ID type check
 %
 %
@@ -38,8 +36,6 @@
 % C=[circle,...]
 
 point(X, Y) :- number(X), number(Y), X >= 0, Y >= 0. %ID type check
-
-%number(X), number(Y), X >= 0, Y >= 0 ---> point(X,Y).
 
 % circle(point(X,Y), R) :-
 
