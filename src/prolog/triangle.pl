@@ -62,15 +62,21 @@ circles(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), RA, RB, RC) :-
 
 
 descartes(R1, R2, R3, RI, RO) :-
-  K1 is 1/R1, % todo +/-
-  K2 is 1/R2,
-  K3 is 1/R3,
-  KI is (K1 + K2 + K3 + 2*sqrt(K1*K2 + K2*K3 + K3*K1)),
-  KO is (K1 + K2 + K3 - 2*sqrt(K1*K2 + K2*K3 + K3*K1)),
+  % inner circle has positive curvature
+  K1i is 1/R1,
+  K2i is 1/R2,
+  K3i is 1/R3,
+  % outer circle has negative curvature
+  K1o is (-(1/R1)),
+  K2o is (-(1/R2)),
+  K3o is (-(1/R3)),
+  KI is (K1i + K2i + K3i + 2*sqrt(K1i*K2i + K2i*K3i + K3i*K1i)),
+  KO is (K1o + K2o + K3o - 2*sqrt(K1o*K2o + K2o*K3o + K3o*K1o)),
   RI is abs(1/KI),
   RO is abs(1/KO).
 
-% special case: third circle becomes a line
+% special case: third circle is a line
+% has zero curvature and an infinite radius
 descartes(R1, R2, RI, RO) :-
     K1 is (1 / R1),
     K2 is (1 / R2),
