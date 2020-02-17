@@ -31,12 +31,20 @@ graph :-
     send(@cj, fill_pattern, colour(green)),
     send(@ck, fill_pattern, colour(orange)),
 
-    send(P, append, button(box, message(@prolog, add_box, P))),
-	send(P, append, button(ellipse, message(@prolog, add_ellipse, P))),
-	send(P, append, button(quit, message(P, destroy))),
+    send(P, append, button(box, message(@prolog, add_box, W))),
+	send(P, append, button(ellipse, message(@prolog, add_ellipse, W))),
+	send(P, append, button(quit, message(W, destroy))),
+
 
     send(W, open).
 
+add_box(W) :-
+	send(W, display, new(B, box(100, 50))),
+	send(B, recogniser, @shape_recogniser).
+	
+add_ellipse(W) :-
+	send(W, display, new(E, ellipse(100, 50))),
+	send(E, recogniser, @shape_recogniser).
 
 layoutdemo1 :-
     new(D, dialog('Layout Demo 1')),
