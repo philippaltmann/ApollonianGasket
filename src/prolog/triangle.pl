@@ -159,12 +159,13 @@ vieta(F, R1, R2, R3, X, Y, K) :-
   C2 = 1/R2,
   C3 = 1/R3,
   KN = (2 * (C1 + C2 + C3) - CF),
-  MN = (2 * (C1 + C2 + C3) - CF) / KN,
-  X is MN, % real
-  Y is -MN, % imag
+  MN = (2 * (C1 + C2 + C3) - CF) / KN, % Complex multiplication
+  %mul((R1,I1), (R2,I2), (ResR,ResI))
+  X iis real(MN), % real
+  Y iis imaginary(MN), % imag
   K is 1/KN.
 
-% M1 is (X + Y * J)
+% M is (X + Y * J)
 % X: x center coord
 % Y: y center coord
 % J: Complex Number
