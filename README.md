@@ -15,24 +15,6 @@ yarn run serve
 yarn run api
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
 ## Time & Performance Measures:
 ```
 ?- statistics(walltime, [TimeSinceStart | [TimeSinceLastCall]]),
@@ -40,21 +22,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     statistics(walltime, [NewTimeSinceStart | [ExecutionTime]]),
     write('Execution took '), write(ExecutionTime), write(' ms.'), nl.
 ```
-
-fetch
-1 17 | 0
-2 13 | 0
-3 8 | 0
-4 21 | 0
-5 32 | 1
-6 71 | 3
-7 178 | 7
-8 563 | 17
-9 1551 | 46
-10 4263 | 122
-11 13411 | 398
-12 39393 | 1081
-
 
 ### Results:
 Execution Times in Milliseconds
