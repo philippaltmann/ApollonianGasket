@@ -4,7 +4,7 @@
 % triangle(ID, P1, P2, P3) :-
 %   point(P1, AX, AY), point(P2, BX, BY), point(P3, CX, CY).
 
-% sides(Triangle, A, B, C, D1, D2, D3):-
+% side(Triangle, A, B, C, D1, D2, D3):-
 %   triangle(Triangle, A, B, C), point(A, AX, AY), point(B, BX, BY), point(C, CX, CY),
 %   distance()
 
@@ -50,14 +50,14 @@ triangle(point(XA, YA), point(XB, YB), point(XC, YC)) :-
 % distance(point(X1, Y1), point(X2, Y2), D) :-
 %   D is sqrt((X2-X1)^2 + (Y2-Y1)^2).
 
-sides(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), DA, DB, DC) :-
+side(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), DA, DB, DC) :-
   triangle(point(XA, YA), point(XB, YB), point(XC, YC)),
   DA is sqrt((XB-XC)^2 + (YB-YC)^2),
   DB is sqrt((XA-XC)^2 + (YA-YC)^2),
   DC is sqrt((XA-XB)^2 + (YA-YB)^2).
 
 circles(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), RA, RB, RC) :-
-  sides(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), A, B, C),
+  side(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), A, B, C),
   RA is 1/2*(-A+B+C),
   RB is 1/2*( A-B+C),
   RC is 1/2*( A+B-C).
@@ -69,9 +69,9 @@ descartes(R1, R2, R3, RI, RO) :-
   K2i is 1/R2,
   K3i is 1/R3,
   % outer circle has negative curvature
-  K1o is (-(1/R1)),
-  K2o is (-(1/R2)),
-  K3o is (-(1/R3)),
+  K1o is 1/R1,
+  K2o is 1/R2,
+  K3o is 1/R3,
   KI is (K1i + K2i + K3i + 2*sqrt(K1i*K2i + K2i*K3i + K3i*K1i)),
   KO is (K1o + K2o + K3o - 2*sqrt(K1o*K2o + K2o*K3o + K3o*K1o)),
   RI is abs(1/KI),
@@ -92,7 +92,7 @@ descartes(R1, R2, RI, RO) :-
 % todo circle(point(X,Y), R)
 % outer(triangle(point(1, 1), point(3, 1), point(2, 3)), X, Y, R).
 outer(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), X, Y, R):-
-  sides(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), A, B, C),
+  side(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), A, B, C),
   S is 1/2*(A+B+C),
   Delta is sqrt(S*(S-A)*(S-B)*(S-C)), % Herons Formula,
   U is A - (Delta/(S - A)),
@@ -109,7 +109,7 @@ outer(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), X, Y, R):-
 % todo circle(point(X,Y), R)
 % inner(triangle(point(1, 1), point(3, 1), point(2, 3)), X, Y, R).
 inner(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), X, Y, R):-
-  sides(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), A, B, C),
+  side(triangle(point(XA, YA), point(XB, YB), point(XC, YC)), A, B, C),
   S is 1/2*(A+B+C),
   Delta is sqrt(S*(S-A)*(S-B)*(S-C)), % Herons Formula,
   U is A + (Delta/(S - A)),
