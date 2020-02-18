@@ -3,6 +3,7 @@
 :- use_module(library(autowin)).
 
 :- consult(triangle).
+:- consult(apollonian).
 
 %test_barchart :-
     %new(W, picture),
@@ -23,39 +24,46 @@ graph :-
 
     %R1 :- descartes(25, 25, 25, RO),
 
+
+    % Make circles tangent
+    tangent((25, 25), (125, 50), (107, 97), [[_, _, R1], [_, _, R2], [_, _, R3]]),
+
     % Starting circles
     send(W, display,
-        new(@ci, circle(100)), point(25, 25)),
+        new(@ci, circle(R1)), point(25, 25)),
     send(W, display,
-        new(@cj, circle(50)), point(125, 50)),
+        new(@cj, circle(R2)), point(125, 50)),
     send(W, display,
-        new(@ck, circle(50)), point(107, 97)),
-    %send(W, display, 
-        %new(@ca, circle(5.129522995848638)), point(35.580669434862095, 53.825760146249756)),
+        new(@ck, circle(R3)), point(107, 97)),
+    
 
     % Descartes
-    descartes(100, 50, 50, RI, RO),
+    descartes(R1, R2, R3, RI, RO),
     % Number inside circle
+    
 
     % Generate inner circle
     % descartes(R1, R2, R3, RI, RO),
-    inner(triangle(point(25, 25), point(125, 50), point(107, 97)), XA, YA, _),
-    send(W, display,
-        new(@ca, circle(RI)), point(XA, YA)),
+    %inner(triangle(point(25, 25), point(125, 50), point(107, 97)), XA, YA, _),
+    %send(W, display,
+        %new(@ca, circle(RI)), point(XA, YA)),
 
     % Generate outer circle
-    outer(triangle(point(25, 25), point(125, 50), point(107, 97)), XB, YB, _),
+    outer(triangle(point(25, 25), point(125, 50), point(107, 97)), XB, YB, R4),
     send(W, display,
-        new(@cb, circle(RO)), point(XB, YB)),
+        new(@cb, circle(R4)), point(XB-12, YB-48)),
 
-    
+    % Get center of circle
+    flip([25, 25, 100], [125, 50, 50], [107, 97, 50], [5, 35, 53], [X5, Y5, R5]),
+    send(W, display,
+        new(@cz, circle(R5)), point(X5, Y5+16)),
 
     send(@ci, fill_pattern, colour(blue)),
     send(@cj, fill_pattern, colour(green)),
     send(@ck, fill_pattern, colour(orange)),
 
-    send(P, append, button(box, message(@prolog, add_box, W))),
-	send(P, append, button(ellipse, message(@prolog, add_ellipse, W))),
+    %send(P, append, button(box, message(@prolog, add_box, W))),
+	%send(P, append, button(ellipse, message(@prolog, add_ellipse, W))),
 	send(P, append, button(quit, message(W, destroy))),
 
 
