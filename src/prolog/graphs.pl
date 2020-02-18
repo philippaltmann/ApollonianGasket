@@ -20,12 +20,35 @@ graph :-
     new(P, dialog),			% create dialog panel
 
 	send(P, above, W),		% put panel below drawing-area
+
+    %R1 :- descartes(25, 25, 25, RO),
+
+    % Starting circles
     send(W, display,
         new(@ci, circle(100)), point(25, 25)),
     send(W, display,
         new(@cj, circle(50)), point(125, 50)),
     send(W, display,
         new(@ck, circle(50)), point(107, 97)),
+    %send(W, display, 
+        %new(@ca, circle(5.129522995848638)), point(35.580669434862095, 53.825760146249756)),
+
+    % Descartes
+    descartes(100, 50, 50, RI, RO),
+    % Number inside circle
+
+    % Generate inner circle
+    % descartes(R1, R2, R3, RI, RO),
+    inner(triangle(point(25, 25), point(125, 50), point(107, 97)), XA, YA, _),
+    send(W, display,
+        new(@ca, circle(RI)), point(XA, YA)),
+
+    % Generate outer circle
+    outer(triangle(point(25, 25), point(125, 50), point(107, 97)), XB, YB, _),
+    send(W, display,
+        new(@cb, circle(RO)), point(XB, YB)),
+
+    
 
     send(@ci, fill_pattern, colour(blue)),
     send(@cj, fill_pattern, colour(green)),
