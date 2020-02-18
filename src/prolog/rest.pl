@@ -17,4 +17,4 @@ handle_gasket(Request) :-
   tangent((X1, Y1), (X2, Y2), (X3, Y3), Base),
   % Generate Gasket for given Depth based on Tangent Circles
   gasket( Base, Depth, Gasket ),
-  cors_enable, reply_json(Gasket, []).
+  cors_enable, reply_json(Gasket).
