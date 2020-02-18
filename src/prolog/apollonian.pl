@@ -1,9 +1,3 @@
-:- dynamic(memrec/6).
-% List Handling
-% append([], X, X).
-% append([H|T], X, [H|S]) :- append(T, X, S).
-
-
 % Triangular Math -> Base Circles from Triangle
 sides(((XA, YA), (XB, YB), (XC, YC)), DA, DB, DC) :-
   DA is sqrt((XB-XC)^2 + (YB-YC)^2),
@@ -45,8 +39,6 @@ solve(C1, C2, C3, S) :-
   sum([P12, P13, P23], SP), sqrt(SP, SQ), % P12 + P13 + P23 | sqrt()
   mul(SQ, (2,0), SQ2), sum([C1, C2, C3, SQ2], S).
 
-
-% adjacent((200, 200, -200), (100, 200, 100), (300, 200, 100), C4).
 adjacent([X1, Y1, R1], [X2, Y2, R2], [X3, Y3, R3], [X4, Y4, R4]) :-
   % Calculate Bends and solve for 4th Radius using Descartes
   B1 is 1/R1, B2 is 1/R2, B3 is 1/R3, % calculate bends
@@ -54,7 +46,6 @@ adjacent([X1, Y1, R1], [X2, Y2, R2], [X3, Y3, R3], [X4, Y4, R4]) :-
   % Calculate Relative Centers to Solve Descartes Equation
   solve((X1*B1, Y1*B1), (X2*B2, Y2*B2), (X3*B3, Y3*B3), BC4),
   div(BC4, (B4, 0), (X4, Y4)).
-
 
 flip([X1, Y1, R1], [X2, Y2, R2], [X3, Y3, R3], [X4, Y4, R4], [X5, Y5, R5]) :-
   % "So if we already have one value for b_4, we can just subtract it from double the sum of the other three bends to find the second value of b_4."
@@ -81,19 +72,15 @@ recurse( _, _, _, _, [], 0).
 
 % CO: Fixed Circle
 recurse(C1, C2, C3, CO, [ C5, C6, C7|Tail ], Depth) :-
-  memrec(C1, C2, C3, CO, [ C5, C6, C7|Tail ], Depth), !.
-
-recurse(C1, C2, C3, CO, [ C5, C6, C7|Tail ], Depth) :-
   flip(CO, C1, C2, C3, C5),
   flip(CO, C1, C3, C2, C6),
   flip(CO, C2, C3, C1, C7), !,
   DepthN is Depth - 1,
-  recurse(CO, C1, C2, C5, Rec1, DepthN),
-  recurse(CO, C1, C3, C6, Rec2, DepthN),
-  recurse(CO, C2, C3, C7, Rec3, DepthN),
+  recurse(C1, C2, CO, C5, Rec1, DepthN),
+  recurse(C1, C3, CO, C6, Rec2, DepthN),
+  recurse(C2, C3, CO, C7, Rec3, DepthN),
   append(Rec1, Rec2, PreTail),
-  append(PreTail, Rec3, Tail),
-  assertz(memrec(C1, C2, C3, CO, [ C5, C6, C7|Tail ], Depth)).
+  append(PreTail, Rec3, Tail).
 
 % for time & performance statistics:
 loop_through_list(File, [Head|[]]) :- write(File, Head).
